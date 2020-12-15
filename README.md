@@ -1,7 +1,7 @@
 # Investigación de Operaciones 1
 Implementaciones sobre análisis de sensibilidad
 
-![Logo UD](https://commons.wikimedia.org/wiki/File:Escudo_UD.svg)
+<img src="LOGO.png" width=200 height=200>
 
 * Esteban Olaya 20171020135
 * Jairo Buitrago 20171020002
