@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from tkinter import *
 from Analisis import Analisis
 from idlelib.tooltip import Hovertip
@@ -64,7 +63,7 @@ Label del titulo de la ventana
 """
 mi_label = Label(ventana, text="Analisis Financiero de prestamos",fg='black', font=("arial",24))
 mi_label.place(x=15,y=0)
-Hovertip(mi_label, text="puto el que lo lea", hover_delay=200)
+Hovertip(mi_label, text="Puto el que lo lea", hover_delay=200)
 #mi_label.grid(row=0, column=0, padx=5, pady=10,columnspan=2)
 
 """

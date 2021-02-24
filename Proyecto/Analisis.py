@@ -1,4 +1,6 @@
 import math
+import statistics as st
+import numpy as np
 import pandas as pd
 
 """
@@ -50,6 +52,20 @@ class Analisis:
         return cuotas
 
     """
+    Función que calcula y retorna los aumentos de la tasa de interes dado el número maximo
+    de periodos a analizar
+    """
+
+    def definir_intereses(self, periodos):
+        interes = []
+        datos = self.tasas()
+        cv = self.promediosAnio(datos)
+        for i in range(len(periodos)):
+            interes.append(self.tasa_interes)
+            self.tasa_interes += cv 
+        return interes
+
+    """
     calcula y retorna la matriz de sensibilidad. (utiliza la función "VPN" para calcular los posibles financiamientos en 
     dados los distintos periodos y las distintas cuotas calculadas en los metodos anteriores)
     """
@@ -57,38 +73,42 @@ class Analisis:
     def calcular_matriz(self):
         periodos = self.calcular_periodos()
         cuotas = self.calcular_cuotas()
+        interes = self.definir_intereses(periodos)
         matriz = []
-        print(periodos)
+        print(interes)
         for i in range(len(periodos)):
-            fila = [] 
-            incre = int(periodos[i]/12)
-            self.tasa_interes += incre*self.promediosAnio()
-            print(self.tasa_interes,incre)
+            fila = []
+            self.tasa_interes = interes[i]
             for cuota in cuotas:
                 fila.append(round(self.VPN(periodos[i],cuota),0))
             matriz.append(fila)
         return matriz 
 
+    """
+    Función que obtiene las tasas de interes obtenidas del banco de la republica.
+    """
+
     def tasas(self):
-        datos = pd.read_excel("tasas.xlsx")
-        datos["tasa"] = datos.tasa/100
+        datos = pd.read_excel("TasasTarea.xlsx")
         return datos
 
-    def promediosAnio(self):
-        datos = self.tasas()
-        tasas = []
-        for i in range(2006,2017):
-            tasas.append(datos.loc[datos.Anio == i].tasa.sum())
+    """
+    Función que calcula el coeficiente de variación para predecir las tasas de interes
+    """
 
-        incrementos = []
-        for i in range(len(tasas)):
-            if i+1 < len(tasas):
-                incrementos.append(tasas[i] - tasas[i+1])
-        return sum(incrementos)/len(incrementos)
+    def promediosAnio(self, tasas):
+        promedios = []
+        for i in range(tasas.anio.min(),tasas.anio.max()+1):
+            promedios.append(tasas.tasa[tasas.anio == i].mean())
+        promedios = np.array(promedios)
+        return (st.stdev(promedios)/np.mean(promedios))/100
 
-#a = Analisis(1,2,3,4,5,6,7)
+            
+
+a = Analisis(0.19,1500,500,100,72,12,12)
 #b = a.calcular_matriz()
-#datos = a.tasas()
-
+datos = a.tasas()
+print(a.promediosAnio(datos))
+#print(datos.anio.value_counts().keys()[0])
 
 
